@@ -3,10 +3,20 @@ from django.db import models
 class Course(models.Model):
     title = models.CharField(max_length=255)
     datetime = models.DateTimeField(auto_now=True, editable=False)
-    items = models.ManyToManyField('Item', through='CourseContent')
+    lessons = models.ManyToManyField('Lesson', through='CourseContent')
 
 class CourseContent(models.Model):
     course = models.ForeignKey('Course')
+    lesson = models.ForeignKey('Lesson')
+    index = models.PositiveIntegerField()
+
+class Lesson(models.Model):
+    title = models.CharField(max_length=255)
+    datetime = models.DateTimeField(auto_now=True, editable=False)
+    items = models.ManyToManyField('Item', through='LessonContent')
+
+class LessonContent(models.Model):
+    lesson = models.ForeignKey('Lesson')
     item = models.ForeignKey('Item')
     index = models.PositiveIntegerField()
 
