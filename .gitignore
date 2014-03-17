@@ -1,6 +1,5 @@
 *.log
 *.pot
 *.pyc
-manage.py
 env/*
 settings.py
