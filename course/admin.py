@@ -23,8 +23,18 @@ class ResourceAdmin(admin.ModelAdmin):
 class ExternalResourceAdmin(admin.ModelAdmin):
     exclude = ('body', 'related')
 
+class TestContentsInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = Test.questions.through
+    extra = 1
+    verbose_name = 'Test question'
+    verbose_name_plural = 'Test questions'
+
+class TestAdmin(admin.ModelAdmin):
+    inlines = [TestContentsInline]
+
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Resource, ResourceAdmin)
 admin.site.register(ExternalResource, ExternalResourceAdmin)
-admin.site.register(Test)
+admin.site.register(Test, TestAdmin)
+admin.site.register(Question)

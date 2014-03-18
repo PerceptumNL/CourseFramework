@@ -93,11 +93,19 @@ class ExternalResource(Resource):
                 resource_type='ex', *args, **kwargs)
 
 class Test(Item):
-    questions = models.ManyToManyField('Question')
+    questions = models.ManyToManyField('Question', through='TestContents')
     datetime = models.DateTimeField(auto_now=True, editable=False)
 
     def __init__(self, *args, **kwargs):
         super(Test, self).__init__(item_type='te', *args, **kwargs)
+
+class TestContents(models.Model):
+    test = models.ForeignKey('Test')
+    question = models.ForeignKey('Question')
+    order = models.PositiveSmallIntegerField()
+
+    class Meta:
+        ordering = ['order']
 
 class Question(models.Model):
     title = models.CharField(max_length=255)
