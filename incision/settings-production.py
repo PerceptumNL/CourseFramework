@@ -43,9 +43,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'adminsortable',
-	'frontend',
-	'backend',
-    'course'
+    'frontend',
+    'backend',
+    'course',
+    'assetstorage',
+    'django_summernote'
 )
 
 # List of callables that know how to import templates from various sources.
@@ -98,3 +100,32 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+# Options for database file storing,
+# must be in line with assetstorage.models and assetstorage.urls
+DBS_OPTIONS = {
+    "table": "course_asset",
+    "base_url": "/asset"
+}
+
+SUMMERNOTE_CONFIG = {
+    # Using SummernoteWidget - iframe mode
+    'iframe': True,  # or set False to use SummernoteInplaceWidget - no iframe mode
+
+    # Change editor size
+    'width': '100%',
+    'height': '480',
+
+    # Set editor language/locale
+    'lang': 'en-US',
+
+    # Set `upload_to` function for attachments.
+    'attachment_upload_to': DBS_OPTIONS['base_url'],
+
+    # Set custom storage class for attachments.
+    'attachment_storage_class': "assetstorage.models.DatabaseStorageWrapper"
+}
