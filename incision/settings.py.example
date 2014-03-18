@@ -13,7 +13,6 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -38,9 +37,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'adminsortable',
-	'frontend',
-	'backend',
+    'frontend',
+    'backend',
     'course',
+    'assetstorage',
     'django_summernote'
 )
 
@@ -97,6 +97,17 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+# Options for database file storing,
+# must be in line with assetstorage.models and assetstorage.urls
+DBS_OPTIONS = {
+    "table": "course_asset",
+    "base_url": "/asset"
+}
+
 SUMMERNOTE_CONFIG = {
     # Using SummernoteWidget - iframe mode
     'iframe': True,  # or set False to use SummernoteInplaceWidget - no iframe mode
@@ -107,4 +118,10 @@ SUMMERNOTE_CONFIG = {
 
     # Set editor language/locale
     'lang': 'en-US',
+
+    # Set `upload_to` function for attachments.
+    'attachment_upload_to': DBS_OPTIONS['base_url'],
+
+    # Set custom storage class for attachments.
+    'attachment_storage_class': "assetstorage.models.DatabaseStorageWrapper"
 }
