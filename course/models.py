@@ -9,7 +9,7 @@ class Course(models.Model):
         return str(self)
 
     def __unicode__(self):
-        return str(self)
+        return u'%s' % (self.__str__(),)
 
     def __str__(self):
         return self.title
@@ -31,7 +31,7 @@ class Lesson(models.Model):
         return str(self)
 
     def __unicode__(self):
-        return str(self)
+        return u'%s' % (self.__str__(),)
 
     def __str__(self):
         return self.title
@@ -65,7 +65,7 @@ class Item(models.Model):
         return str(self)
 
     def __unicode__(self):
-        return str(self)
+        return u'%s' % (self.__str__(),)
 
     def __str__(self):
         return self.title
@@ -124,7 +124,7 @@ class Question(models.Model):
         return str(self)
 
     def __unicode__(self):
-        return str(self)
+        return u'%s' % (self.__str__(),)
 
     def __str__(self):
         return self.title
