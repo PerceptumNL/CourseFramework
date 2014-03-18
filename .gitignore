@@ -3,3 +3,5 @@
 *.pyc
 env/*
 settings.py
+collectstatic
+HOWTO.txt
