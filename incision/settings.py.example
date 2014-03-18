@@ -40,7 +40,8 @@ INSTALLED_APPS = (
     'adminsortable',
 	'frontend',
 	'backend',
-    'course'
+    'course',
+    'django_summernote'
 )
 
 # List of callables that know how to import templates from various sources.
@@ -95,3 +96,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SUMMERNOTE_CONFIG = {
+    # Using SummernoteWidget - iframe mode
+    'iframe': True,  # or set False to use SummernoteInplaceWidget - no iframe mode
+
+    # Change editor size
+    'width': '100%',
+    'height': '480',
+
+    # Set editor language/locale
+    'lang': 'en-US',
+}
