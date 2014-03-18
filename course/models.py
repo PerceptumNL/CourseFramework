@@ -5,20 +5,44 @@ class Course(models.Model):
     datetime = models.DateTimeField(auto_now=True, editable=False)
     lessons = models.ManyToManyField('Lesson', through='CourseContent')
 
+    def __repr__(self):
+        return str(self)
+
+    def __unicode__(self):
+        return str(self)
+
+    def __str__(self):
+        return self.title
+
 class CourseContent(models.Model):
     course = models.ForeignKey('Course')
     lesson = models.ForeignKey('Lesson')
-    index = models.PositiveIntegerField()
+    order = models.PositiveSmallIntegerField()
+
+    class Meta:
+        ordering = ['order']
 
 class Lesson(models.Model):
     title = models.CharField(max_length=255)
     datetime = models.DateTimeField(auto_now=True, editable=False)
     items = models.ManyToManyField('Item', through='LessonContent')
 
+    def __repr__(self):
+        return str(self)
+
+    def __unicode__(self):
+        return str(self)
+
+    def __str__(self):
+        return self.title
+
 class LessonContent(models.Model):
     lesson = models.ForeignKey('Lesson')
     item = models.ForeignKey('Item')
-    index = models.PositiveIntegerField()
+    order = models.PositiveSmallIntegerField()
+
+    class Meta:
+        ordering = ['order']
 
 class Item(models.Model):
     TYPE_RESOURCE = 're'
@@ -78,6 +102,19 @@ class Test(Item):
 class Question(models.Model):
     title = models.CharField(max_length=255)
     answer = models.CharField(max_length=255)
+    positive_feedback = models.ForeignKey('Resource', null=True, blank=True,
+            related_name='+')
+    negative_feedback = models.ForeignKey('Resource', null=True, blank=True,
+            related_name='+')
+
+    def __repr__(self):
+        return str(self)
+
+    def __unicode__(self):
+        return str(self)
+
+    def __str__(self):
+        return self.title
 
 class MultipleChoiceQuestion(Question):
     options = models.ManyToManyField('QuestionOption')

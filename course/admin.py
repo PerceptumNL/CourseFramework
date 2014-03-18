@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.forms.widgets import NumberInput
 from course.models import *
+from adminsortable.admin import SortableInlineAdminMixin
 
-class CourseContentsInline(admin.TabularInline):
+class CourseContentsInline(SortableInlineAdminMixin, admin.TabularInline):
     model = Course.lessons.through
 
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -14,7 +15,7 @@ class CourseContentsInline(admin.TabularInline):
 class CourseAdmin(admin.ModelAdmin):
     inlines = [ CourseContentsInline ]
 
-class LessonContentsInline(admin.TabularInline):
+class LessonContentsInline(SortableInlineAdminMixin, admin.TabularInline):
     model = Lesson.items.through
 
     def formfield_for_dbfield(self, db_field, **kwargs):
