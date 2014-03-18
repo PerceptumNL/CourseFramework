@@ -9,7 +9,7 @@ class Course(models.Model):
         return str(self)
 
     def __unicode__(self):
-        return str(self)
+        return u'%s' % (self.__str__(),)
 
     def __str__(self):
         return self.title
@@ -31,7 +31,7 @@ class Lesson(models.Model):
         return str(self)
 
     def __unicode__(self):
-        return str(self)
+        return u'%s' % (self.__str__(),)
 
     def __str__(self):
         return self.title
@@ -65,7 +65,7 @@ class Item(models.Model):
         return str(self)
 
     def __unicode__(self):
-        return str(self)
+        return u'%s' % (self.__str__(),)
 
     def __str__(self):
         return self.title
@@ -85,6 +85,11 @@ class Resource(Item):
     def __init__(self, *args, **kwargs):
         super(Resource, self).__init__(item_type=Item.TYPE_RESOURCE, *args, **kwargs)
 
+    def downcast(self):
+        if self.resource_type == TYPE_EXTERNAL:
+            return self.externalresource
+        return self
+
 class ExternalResource(Resource):
     url = models.CharField(max_length=255)
 
@@ -93,11 +98,19 @@ class ExternalResource(Resource):
                 resource_type='ex', *args, **kwargs)
 
 class Test(Item):
-    questions = models.ManyToManyField('Question')
+    questions = models.ManyToManyField('Question', through='TestContents')
     datetime = models.DateTimeField(auto_now=True, editable=False)
 
     def __init__(self, *args, **kwargs):
         super(Test, self).__init__(item_type='te', *args, **kwargs)
+
+class TestContents(models.Model):
+    test = models.ForeignKey('Test')
+    question = models.ForeignKey('Question')
+    order = models.PositiveSmallIntegerField()
+
+    class Meta:
+        ordering = ['order']
 
 class Question(models.Model):
     title = models.CharField(max_length=255)
@@ -111,7 +124,7 @@ class Question(models.Model):
         return str(self)
 
     def __unicode__(self):
-        return str(self)
+        return u'%s' % (self.__str__(),)
 
     def __str__(self):
         return self.title
