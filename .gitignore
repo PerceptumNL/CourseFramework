@@ -1,7 +1,5 @@
 *.log
 *.pot
 *.pyc
-env/*
 settings.py
-collectstatic
-HOWTO.txt
+.gitignore
