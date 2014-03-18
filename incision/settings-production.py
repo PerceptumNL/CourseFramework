@@ -108,7 +108,7 @@ STATICFILES_DIRS = (
 # Options for database file storing,
 # must be in line with assetstorage.models and assetstorage.urls
 DBS_OPTIONS = {
-    "table": "course_asset",
+    "table": "asset",
     "base_url": "/asset"
 }
 
