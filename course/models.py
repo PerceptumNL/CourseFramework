@@ -56,9 +56,9 @@ class Item(models.Model):
     title = models.CharField(max_length=255)
 
     def downcast(self):
-        if self.item_type == TYPE_RESOURCE:
+        if self.item_type == self.TYPE_RESOURCE:
             return self.resource
-        elif self.item_type == TYPE_TEST:
+        elif self.item_type == self.TYPE_TEST:
             return self.test
         return self
 
@@ -87,7 +87,7 @@ class Resource(Item):
         super(Resource, self).__init__(item_type=Item.TYPE_RESOURCE, *args, **kwargs)
 
     def downcast(self):
-        if self.resource_type == TYPE_EXTERNAL:
+        if self.resource_type == self.TYPE_EXTERNAL:
             return self.externalresource
         return self
 

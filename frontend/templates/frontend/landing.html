@@ -73,7 +73,7 @@
 								<h3 class="panel-title">{{ course.title }}</h3> 
 							</div>
 							<div class="col-lg-4">
-								<a href="/course/{{course.pk }}"><button type="button" class="btn btn-primary pull-right">Start Course</button></a>
+								<a href="/course/{{course.pk }}/lessons"><button type="button" class="btn btn-primary pull-right">Start Course</button></a>
 							</div>
 						</div>
 						</div>
@@ -89,16 +89,13 @@
 											<div class="panel-body"> {{ lesson.title }} </div>
 										{% endfor %}
 										</div>
-									</div>
 									{% endif %}	
 								</div>
-							</div>	
-						</div>
-					</div>					
-				</div>
-				{% endfor %}
-			
-			
+							</div>
+						</div>	
+					</div>
+				</div>					
+				{% endfor %}	
 			{% endif %}
 
 		</div>
