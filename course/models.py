@@ -2,6 +2,7 @@ from django.db import models
 
 class Course(models.Model):
     title = models.CharField(max_length=255)
+    description = models.TextField()
     datetime = models.DateTimeField(auto_now=True, editable=False)
     lessons = models.ManyToManyField('Lesson', through='CourseContent')
 
