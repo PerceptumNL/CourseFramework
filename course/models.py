@@ -49,8 +49,10 @@ class LessonContent(models.Model):
 class Item(PolymorphicModel):
     TYPE_RESOURCE = 're'
     TYPE_TEST = 'te'
+    TYPE_EXTERNAL = 'ex'
     TYPES = (
         (TYPE_RESOURCE, "Resource"),
+        (TYPE_EXTERNAL, "External resource"),
         (TYPE_TEST, "Test")
     )
     item_type = models.CharField(max_length=2, choices=TYPES, editable=False)
@@ -73,15 +75,7 @@ class Item(PolymorphicModel):
         return self.title
 
 class Resource(Item):
-    TYPE_RESOURCE = ''
-    TYPE_EXTERNAL = 'ex'
-    TYPES = (
-        (TYPE_RESOURCE, "Resource"),
-        (TYPE_EXTERNAL, "External Resource")
-    )
     body = models.TextField(null=True, blank=True)
-    resource_type = models.CharField(max_length=2, choices=TYPES,
-            editable=False, default=TYPE_RESOURCE)
     related = models.ManyToManyField('self', null=True, blank=True)
 
     def __init__(self, *args, **kwargs):
@@ -92,12 +86,12 @@ class Resource(Item):
             return self.externalresource
         return self
 
-class ExternalResource(Resource):
-    url = models.CharField(max_length=255)
+class ExternalResource(Item):
+    url = models.URLField(max_length=255)
 
     def __init__(self, *args, **kwargs):
         super(ExternalResource, self).__init__(
-                resource_type='ex', *args, **kwargs)
+                item_type='ex', *args, **kwargs)
 
 class Test(Item):
     questions = models.ManyToManyField('Question', through='TestContents')
@@ -132,7 +126,8 @@ class Question(PolymorphicModel):
         return self.title
 
 class MultipleChoiceQuestion(Question):
-    pass
+    class Meta:
+        proxy = True
 
 class QuestionOption(models.Model):
     value = models.CharField(max_length=100)
