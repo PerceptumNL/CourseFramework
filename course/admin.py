@@ -11,8 +11,8 @@ class ResourceAdmin(PolymorphicChildModelAdmin, SummernoteModelAdmin):
         qs = super(ResourceAdmin, self).get_queryset(request)
         return qs.exclude(resource_type=Resource.TYPE_EXTERNAL)
 
-class ExternalResourceAdmin(admin.ModelAdmin):
-    exclude = ('body', 'related')
+class ExternalResourceAdmin(PolymorphicChildModelAdmin):
+    base_model = ExternalResource
 
 class TestContentsInline(SortableInlineAdminMixin, admin.TabularInline):
     model = Test.questions.through
@@ -40,6 +40,7 @@ class ItemAdmin(PolymorphicParentModelAdmin):
     base_model = Item
     child_models = (
         (Resource, ResourceAdmin),
+        (ExternalResource, ExternalResourceAdmin),
         (Test, TestAdmin),
     )
 
