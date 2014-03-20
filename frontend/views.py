@@ -45,6 +45,6 @@ def resource(request, course_id, lesson_id, resource_id):
     resource = resource.downcast()
     return render(request, 'frontend/resource.html', {
         "course": course,
-        "lessson": lesson,
+        "lesson": lesson,
         "resource": resource,
     })
