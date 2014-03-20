@@ -1,4 +1,5 @@
 from django.db import models
+from polymorphic import PolymorphicModel
 
 class Course(models.Model):
     title = models.CharField(max_length=255)
@@ -45,7 +46,7 @@ class LessonContent(models.Model):
     class Meta:
         ordering = ['order']
 
-class Item(models.Model):
+class Item(PolymorphicModel):
     TYPE_RESOURCE = 're'
     TYPE_TEST = 'te'
     TYPES = (
@@ -113,7 +114,7 @@ class TestContents(models.Model):
     class Meta:
         ordering = ['order']
 
-class Question(models.Model):
+class Question(PolymorphicModel):
     title = models.CharField(max_length=255)
     answer = models.CharField(max_length=255)
     positive_feedback = models.ForeignKey('Resource', null=True, blank=True,
@@ -131,8 +132,10 @@ class Question(models.Model):
         return self.title
 
 class MultipleChoiceQuestion(Question):
-    options = models.ManyToManyField('QuestionOption')
+    pass
 
 class QuestionOption(models.Model):
     value = models.CharField(max_length=100)
     label = models.CharField(max_length=255)
+    question = models.ForeignKey('MultipleChoiceQuestion',
+            related_name='options')
