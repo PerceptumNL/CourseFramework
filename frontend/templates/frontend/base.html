@@ -1,4 +1,5 @@
 {% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +22,7 @@
 		<div class="container">
 			<!-- Header -->
 			<div class="navbar-header">
-				<a href="/" class="navbar-brand"> {{course.title }} </a>
+				<a href="/" class="navbar-brand"> {{ course.title }} - {{lesson.title}}</a>
 				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
@@ -52,42 +53,18 @@
 				<li><img src="{% static 'assets/img/InCisionLogo.png' %}" height="64px"></li>
 			</ul>
 			</div>
+		</div>
+	{% block mainContent %}
+	
+	{% endblock mainContent %}
+	
+	<div class="footer navbar-fixed-bottom">
+		<div class="row">
+			<p>Built by Perceptum</p>
+		</div>
+	</div>
+	
 
-			
-			<div class="container">
-				<h3>Course Description:</h3>
-				<p> {{course.description}} </p>
-				
-			
-			{% for lesson in lessons %}
-				<div class="panel-info">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-lg-8">	
-								<h3> Lesson: {{ lesson.title }} </h3> 
-								
-							</div>
-							<div class="col-lg-4">	
-								<a href="/resource/{{course.pk }}/{{lesson.pk}}/1"><button type="button" class="btn btn-primary pull-right">Start Lesson</button></a>
-								<br><br>
-								<p align="right">resources: <span class="badge"> {{lesson.items.count }}  </span> </p>
-							</div>
-						</div>
-					</div>
-					<div class="panel-body">
-						<div class="btn-toolbar">
-							<div class="btn-group">
-							{% for item in lesson.items.all %}
-								<a href="/resource/{{course.pk }}/{{lesson.pk}}/{{ forloop.counter }}"><button type="button" class="btn btn-default">{{item.title}}</button></a>
-							{% endfor %}
-							</div>
-						</div>
-					</div>
-				</div>	
-				<br>
-			{% endfor %}
-			</div>	
-		
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
