@@ -75,7 +75,8 @@ class Item(PolymorphicModel):
 
 class Resource(Item):
     body = models.TextField(null=True, blank=True)
-    related = models.ManyToManyField('self', null=True, blank=True)
+    related = models.ManyToManyField('self', null=True, blank=True,
+            verbose_name = 'Related resources')
 
     class Meta:
         verbose_name = "Resource"
@@ -119,10 +120,8 @@ class TestContents(models.Model):
 class Question(PolymorphicModel):
     title = models.CharField(max_length=255)
     answer = models.CharField(max_length=255)
-    positive_feedback = models.ForeignKey('Resource', null=True, blank=True,
-            related_name='+')
-    negative_feedback = models.ForeignKey('Resource', null=True, blank=True,
-            related_name='+')
+    positive_feedback = models.TextField(null=True, blank=True)
+    negative_feedback = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Question"

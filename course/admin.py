@@ -19,7 +19,7 @@ class QuestionOptionAdmin(admin.ModelAdmin):
     model = QuestionOption
     form = QuestionOptionForm
 
-class RegularQuestionAdmin(PolymorphicChildModelAdmin):
+class RegularQuestionAdmin(PolymorphicChildModelAdmin, SummernoteModelAdmin):
     base_model = RegularQuestion
 
 class MCOptionsInline(admin.TabularInline):
@@ -29,7 +29,8 @@ class MCOptionsInline(admin.TabularInline):
     verbose_name = "Choice"
     verbose_name_plural = "Choices"
 
-class MultipleChoiceQuestionAdmin(PolymorphicChildModelAdmin):
+class MultipleChoiceQuestionAdmin(PolymorphicChildModelAdmin,
+        SummernoteModelAdmin):
     base_model = MultipleChoiceQuestion
     exclude = ('options',)
     inlines = [MCOptionsInline]
@@ -60,14 +61,9 @@ class TestAdmin(PolymorphicChildModelAdmin):
 ############
 # Resource #
 ############
-class ResourceInline(admin.StackedInline):
-    model = Resource
-
 class ResourceAdmin(PolymorphicChildModelAdmin, SummernoteModelAdmin):
     base_model = Resource
-    def get_queryset(self, request):
-        qs = super(ResourceAdmin, self).get_queryset(request)
-        return qs.exclude(resource_type=Resource.TYPE_EXTERNAL)
+    filter_horizontal = ('related',)
 
 class ExternalResourceAdmin(PolymorphicChildModelAdmin):
     base_model = ExternalResource
@@ -83,6 +79,9 @@ class ItemAdmin(PolymorphicParentModelAdmin):
         (ExternalResource, ExternalResourceAdmin),
         (Test, TestAdmin),
     )
+    list_filter = ('item_type',)
+    list_select_related = True
+    search_fields = ('title',)
 
 ##########
 # Lesson #
