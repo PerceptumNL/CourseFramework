@@ -26,6 +26,7 @@ def lessons(request, course_id):
     except Course.DoesNotExist:
         return HttpResponseRedirect("/")
     return render(request, 'frontend/lessons.html', {
+        "courses": Course.objects.all(),
         "course": course,
         "lessons": course.lessons.all()
     })
@@ -81,6 +82,7 @@ def resource(request, course_id, lesson_id, resource_index):
         "button_list": button_list,
         "crt_index": resource_index
     })
+
 
 def related(request, course_id, lesson_id, parent_id, related_id):
     parent_id = int(parent_id)

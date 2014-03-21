@@ -1,12 +1,14 @@
 {% extends "frontend/base.html" %}
 
+{%block navbarTitle %} {{ course.title }} - {{lesson.title}} {% endblock %}
+
 {% block mainContent %}
 		<div class="container">
 			<!-- NavBar -->
 			<div class="row">
 				<ul class="breadcrumb">
-					<li><a href="/course/{{ course.pk }}/lessons">{{course.title}}</a></li>
-					<li><a href="/resource/{{course.pk }}/{{lesson.pk}}/{{lesson.items.first.pk}}">{{lesson.title}}</a></li>
+					<li><a href="/">{{course.title}}</a></li>
+					<li><a href="/course/{{course.pk }}/lessons">{{lesson.title}}</a></li>
 					{% for crumb in crumbs %}
 						<li><a href="">{{crumb.title}}</a></li>
 					{% endfor %}
@@ -23,7 +25,7 @@
 			<!-- Main Resource -->
 				<div class="col-lg-8">
 					{{ resource.body|safe }}<br>
-					<ul class="pager pull-left">
+					<ul class="pager pull-left clearfix">
 						{% for button in button_list %}
 							<li><a href={{ button.url }}>{{ button.title }}</a></li>
 						{% endfor %}
@@ -51,6 +53,11 @@
 								<a href="{{ relatedRes.externalresource.url }}" target="blank">{{relatedRes.title}}</a>
 								<span class="label label-info pull-right">external</span>
 							</div>
+							{% else %}
+							<div class="panel-body">
+								{{ relatedRed.title }} {{ relatedRes.resource_type }}
+								
+							</div>
 							{% endif %}
 						{% endfor %}
 					</div>
@@ -59,3 +66,7 @@
 			</div>
 		</div>
 {% endblock mainContent %}
+
+{% block footer %}
+	{{course.title}} - {{lesson.title}}
+{% endblock footer %}
