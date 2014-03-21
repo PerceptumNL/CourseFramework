@@ -80,7 +80,8 @@ def resource(request, course_id, lesson_id, resource_index):
         "lesson": lesson,
         "resource": resource,
         "button_list": button_list,
-        "crt_index": resource_index
+        "crt_index": resource_index,
+        "crumbs": []
     })
 
 
@@ -115,6 +116,7 @@ def related(request, course_id, lesson_id, parent_id, related_id):
         "resource": resource,
         "button_list": button_list,
         "parent": parent_id,
+        "crumbs": crumbs
     })
 
 
