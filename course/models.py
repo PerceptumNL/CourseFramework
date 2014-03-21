@@ -134,8 +134,10 @@ class TestContents(models.Model):
 class Question(PolymorphicModel):
     question = models.CharField(max_length=255)
     answer = models.CharField(max_length=255, verbose_name="Correct Answer")
-    positive_feedback = models.TextField(null=True, blank=True)
-    negative_feedback = models.TextField(null=True, blank=True)
+    positive_feedback = models.TextField(null=True, blank=True,
+        verbose_name="Feedback on correct answer")
+    negative_feedback = models.TextField(null=True, blank=True,
+        verbose_name="Feedback on incorrect answer")
 
     class Meta:
         verbose_name = "Question"
