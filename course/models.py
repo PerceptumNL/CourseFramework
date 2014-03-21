@@ -21,6 +21,15 @@ class CourseContent(models.Model):
     lesson = models.ForeignKey('Lesson')
     order = models.PositiveSmallIntegerField()
 
+    def __repr__(self):
+        return str(self)
+
+    def __unicode__(self):
+        return u'%s' % (self.__str__(),)
+
+    def __str__(self):
+        return "%s" % (self.lesson,)
+
     class Meta:
         ordering = ['order']
 
@@ -42,6 +51,15 @@ class LessonContent(models.Model):
     lesson = models.ForeignKey('Lesson')
     item = models.ForeignKey('Item')
     order = models.PositiveSmallIntegerField()
+
+    def __repr__(self):
+        return str(self)
+
+    def __unicode__(self):
+        return u'%s' % (self.__str__(),)
+
+    def __str__(self):
+        return "%s:%s" % (self.lesson.title, self.item.title,)
 
     class Meta:
         ordering = ['order']
@@ -114,8 +132,8 @@ class TestContents(models.Model):
         ordering = ['order']
 
 class Question(PolymorphicModel):
-    title = models.CharField(max_length=255)
-    answer = models.CharField(max_length=255)
+    question = models.CharField(max_length=255)
+    answer = models.CharField(max_length=255, verbose_name="Correct Answer")
     positive_feedback = models.TextField(null=True, blank=True)
     negative_feedback = models.TextField(null=True, blank=True)
 
@@ -130,7 +148,7 @@ class Question(PolymorphicModel):
         return u'%s' % (self.__str__(),)
 
     def __str__(self):
-        return self.title
+        return self.question
 
 class RegularQuestion(Question):
     class Meta:
@@ -145,7 +163,15 @@ class MultipleChoiceQuestion(Question):
         verbose_name_plural = "Multiple-choice questions"
 
 class QuestionOption(models.Model):
-    value = models.CharField(max_length=100)
-    label = models.CharField(max_length=255)
+    answer = models.CharField(max_length=100)
     question = models.ForeignKey('MultipleChoiceQuestion',
             related_name='options')
+
+    def __repr__(self):
+        return str(self)
+
+    def __unicode__(self):
+        return u'%s' % (self.__str__(),)
+
+    def __str__(self):
+        return "Option: %s" % (self.answer,)

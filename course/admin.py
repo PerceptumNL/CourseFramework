@@ -8,38 +8,26 @@ from polymorphic.admin import PolymorphicParentModelAdmin, PolymorphicChildModel
 ############
 # Question #
 ############
-class QuestionOptionForm(forms.ModelForm):
-    label = forms.CharField(label='Label:')
-    value = forms.CharField(label='Answer:')
-
-    class Meta:
-        model = QuestionOption
-
-class QuestionOptionAdmin(admin.ModelAdmin):
-    model = QuestionOption
-    form = QuestionOptionForm
-
-class RegularQuestionAdmin(PolymorphicChildModelAdmin, SummernoteModelAdmin):
-    base_model = RegularQuestion
-
 class MCOptionsInline(admin.TabularInline):
     model = QuestionOption
-    form = QuestionOptionForm
-    exclude = ('questionoption',)
+    extra = 1
     verbose_name = "Choice"
     verbose_name_plural = "Choices"
 
-class MultipleChoiceQuestionAdmin(PolymorphicChildModelAdmin,
+class MCQuestionAdmin(PolymorphicChildModelAdmin,
         SummernoteModelAdmin):
     base_model = MultipleChoiceQuestion
     exclude = ('options',)
     inlines = [MCOptionsInline]
 
+class RegularQuestionAdmin(PolymorphicChildModelAdmin, SummernoteModelAdmin):
+    base_model = RegularQuestion
+
 class QuestionParentAdmin(PolymorphicParentModelAdmin):
     base_model = Question
     child_models = (
         (RegularQuestion, RegularQuestionAdmin),
-        (MultipleChoiceQuestion, MultipleChoiceQuestionAdmin),
+        (MultipleChoiceQuestion, MCQuestionAdmin),
     )
 
 ########
