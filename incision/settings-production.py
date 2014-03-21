@@ -44,7 +44,8 @@ INSTALLED_APPS = (
     'backend',
     'course',
     'assetstorage',
-    'django_summernote'
+    'django_summernote',
+    'south'
 )
 
 # List of callables that know how to import templates from various sources.
