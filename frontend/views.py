@@ -31,14 +31,14 @@ def lessons(request, course_id):
         "lessons": course.lessons.all()
     })
 
-def resource(request, course_id, lesson_id, resource_index):
-    resource_index = int(resource_index)
+def item(request, course_id, lesson_id, item_index):
+    item_index = int(item_index)
     try:
         course = Course.objects.get(pk=course_id)
         lesson = Lesson.objects.get(pk=lesson_id)
         rel = LessonContent.objects.get(
             lesson = lesson,
-            order = resource_index
+            order = item_index
         )
     except Course.DoesNotExist:
         return HttpResponseRedirect("/")
@@ -51,11 +51,11 @@ def resource(request, course_id, lesson_id, resource_index):
 
     button_list = []
 
-    resource = rel.item.downcast()
-    if resource_index > 0:
+    item = rel.item
+    if item_index > 0:
         try:
-            prev_res = LessonContent.objects.get(lesson=lesson, order=resource_index-1)
-            button = {'title': 'Previous', 'url': '/resource/'+ str(course.pk) +'/'+ str(lesson.pk) +'/'+ str(prev_res.pk)}
+            prev_res = LessonContent.objects.get(lesson=lesson, order=item_index-1)
+            button = {'title': 'Previous', 'url': '/item/'+ str(course.pk) +'/'+ str(lesson.pk) +'/'+ str(prev_res.pk)}
             button_list.append(button)
         except LessonContent.DoesNotExist:
             prev_res = None
@@ -65,8 +65,8 @@ def resource(request, course_id, lesson_id, resource_index):
         prev_res = None
     
     try:
-        next_res = LessonContent.objects.get(lesson=lesson, order=resource_index+1)
-        button = {'title': 'Next', 'url': '/resource/'+ str(course.pk) +'/'+ str(lesson.pk) +'/'+ str(next_res.pk)}
+        next_res = LessonContent.objects.get(lesson=lesson, order=item_index+1)
+        button = {'title': 'Next', 'url': '/item/'+ str(course.pk) +'/'+ str(lesson.pk) +'/'+ str(next_res.pk)}
         button_list.append(button)
     except LessonContent.DoesNotExist:
         next_res = None
@@ -75,12 +75,12 @@ def resource(request, course_id, lesson_id, resource_index):
     except LessonContent.MultipleObjectsReturned:
         return HttpResponseRedirect("/")
 
-    return render(request, 'frontend/resource.html', {
+    return render(request, 'frontend/item.html', {
         "course": course,
         "lesson": lesson,
-        "resource": resource,
+        "item": item,
         "button_list": button_list,
-        "crt_index": resource_index
+        "crt_index": item_index
     })
 
 
