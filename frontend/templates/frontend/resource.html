@@ -89,11 +89,11 @@
 							<h3 class="panel-title">More Info</h3>
 						</div>
 						{% for relatedRes in resource.related.all %}
-							{% if relatedRes.resource_type == relatedRes.TYPE_RESOURCE %}						
+							{% if relatedRes.item_type == relatedRes.TYPE_RESOURCE %}
 							<div class="panel-body">
 								<a href="/resource/{{course.pk }}/{{lesson.pk}}/{{relatedRes.pk}}"> {{relatedRes.title}} </a>
 							</div>
-							{% elif relatedRes.resource_type == relatedRes.TYPE_EXTERNAL %}
+							{% elif relatedRes.item_type == relatedRes.TYPE_EXTERNAL %}
 							<div class="panel-body">
 								<a href="{{ relatedRes.externalresource.url }}" target="blank">{{relatedRes.title}}</a>
 							</div>

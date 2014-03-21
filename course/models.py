@@ -85,11 +85,6 @@ class Resource(Item):
     def __init__(self, *args, **kwargs):
         super(Resource, self).__init__(item_type=Item.TYPE_RESOURCE, *args, **kwargs)
 
-    def downcast(self):
-        if self.resource_type == self.TYPE_EXTERNAL:
-            return self.externalresource
-        return self
-
 class ExternalResource(Item):
     url = models.URLField(max_length=255)
 
