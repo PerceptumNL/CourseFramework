@@ -10,66 +10,25 @@
 					<li><a href="/">{{course.title}}</a></li>
 					<li><a href="/course/{{course.pk }}/lessons">{{lesson.title}}</a></li>
 					{% for crumb in crumbs %}
-						<li><a href="">{{crumb.title}}</a></li>
+						{% if not forloop.last %}
+							<li><a href="/item/{{course.pk }}/{{lesson.pk}}/{{ parent }}/related/{{ crumb.pk }}/">{{crumb.title}}</a></li>
+						{% else %}
+							<li class="active">{{crumb.title}}</li>
+						{% endif %}
 					{% endfor %}
-					<li class="active">{{item.title}}</li>
+					
 				</ul>
 			</div>
 			
-			
-			<!-- Main Content -->
-			<div class="row">
-				<h3> {{item.title}} </h3>
-			</div>
-			<div class="row">			
-			<!-- Main Resource -->
-				<div class="col-lg-8">
-					{{ item.body|safe }}<br>
-					<ul class="pager pull-left clearfix">
-						{% for button in button_list %}
-							<li><a href={{ button.url }}>{{ button.title }}</a></li>
-						{% endfor %}
-					</ul>
-				</div>
-				
-				<!-- Extra Resources -->
-				<div class="col-lg-4">
-                {% if item.item_type != item.TYPE_TEST %}
-                    {% if item.related.all|length > 0 %}
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">More Info</h3>
-                            </div>
-                            {% for relatedRes in item.related.all %}
-                                {% if relatedRes.item_type == relatedRes.TYPE_RESOURCE %}						
-                                <div class="panel-body">
-                                    {% if parent %}
-                                        <a href="/item/{{course.pk }}/{{lesson.pk}}/{{ parent }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
-                                    {% else %}
-                                        <a href="/item/{{course.pk }}/{{lesson.pk}}/{{ crt_index }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
-                                    {% endif %}
-                                </div>
-                                {% elif relatedRes.item_type == relatedRes.TYPE_EXTERNAL %}
-                                <div class="panel-body">
-                                    <a href="{{ relatedRes.url }}" target="blank">{{relatedRes.title}}</a>
-                                    <span class="label label-info pull-right">external</span>
-                                </div>
-                                {% elif relatedRes.item_type == relatedRes.TYPE_TEST %}
-                                <div class="panel-body">
-                                    {% if parent %}
-                                        <a href="/item/{{course.pk }}/{{lesson.pk}}/{{ parent }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
-                                    {% else %}
-                                        <a href="/item/{{course.pk }}/{{lesson.pk}}/{{ crt_index }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
-                                    {% endif %}
-                                    <span class="label label-warning pull-right">exercise</span>
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                {% endif %}
-				</div>
-			</div>
+			{% if item.item_type == item.TYPE_RESOURCE %}
+				{% include "frontend/resource.html" with item=item lesson=lesson course=course %}
+			{% elif item.item_type == item.TYPE_TEST%}
+				{% include "frontend/test.html" with item=item lesson=lesson course=course %}			
+			{% else %}
+				<p> I do not know this type of resource. Probably an external resource </p><br>
+				item.url
+			{% endif %}
+
 		</div>
 {% endblock mainContent %}
 
