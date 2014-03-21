@@ -143,6 +143,10 @@ class Question(PolymorphicModel):
         verbose_name = "Question"
         verbose_name_plural = "Questions"
 
+    @property
+    def type(self):
+        return 'question'
+
     def __repr__(self):
         return str(self)
 
@@ -158,11 +162,19 @@ class RegularQuestion(Question):
         verbose_name = "Regular question"
         verbose_name_plural = "Regular questions"
 
+    @property
+    def type(self):
+        return 'regular_question'
+
 class MultipleChoiceQuestion(Question):
     class Meta:
         proxy = True
         verbose_name = "Multiple-choice question"
         verbose_name_plural = "Multiple-choice questions"
+
+    @property
+    def type(self):
+        return 'mc_question'
 
 class QuestionOption(models.Model):
     answer = models.CharField(max_length=100)
