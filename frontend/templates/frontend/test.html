@@ -1,0 +1,32 @@
+{% extends "frontend/base.html" %}
+
+{% block navbarTitle %} Test {% endblock %}
+
+{% block mainContent %}
+		<div class="container">
+			<!-- NavBar -->
+			<div class="row">
+				<ul class="breadcrumb">
+					<li><a href="/course/{{ course.pk }}/lessons">{{course.title}}</a></li>
+					<li><a href="/resource/{{course.pk }}/{{lesson.pk}}/{{lesson.items.first.pk}}">{{lesson.title}}</a></li>
+					{% for crumb in crumbs %}
+						<li><a href="">{{crumb.title}}</a></li>
+					{% endfor %}
+					<li class="active">{{resource.title}}</li>
+				</ul>
+			</div>
+			
+			<!-- Main Content -->
+			<div class="row">
+				<h3> {{resource.title}} </h3>
+			</div>
+			<div class="row">			
+			<!-- Main Resource -->
+			
+			</div>
+
+{% endblock mainContent %}
+
+{% block footer %}
+	{{course.title}} - {{lesson.title}}
+{% endblock footer %}
