@@ -78,6 +78,9 @@ class Resource(Item):
     body = models.TextField(null=True, blank=True)
     related = models.ManyToManyField('self', null=True, blank=True)
 
+    class Meta:
+        verbose_name = "Resource"
+
     def __init__(self, *args, **kwargs):
         super(Resource, self).__init__(item_type=Item.TYPE_RESOURCE, *args, **kwargs)
 
@@ -89,6 +92,9 @@ class Resource(Item):
 class ExternalResource(Item):
     url = models.URLField(max_length=255)
 
+    class Meta:
+        verbose_name = "External resource"
+
     def __init__(self, *args, **kwargs):
         super(ExternalResource, self).__init__(
                 item_type='ex', *args, **kwargs)
@@ -96,6 +102,9 @@ class ExternalResource(Item):
 class Test(Item):
     questions = models.ManyToManyField('Question', through='TestContents')
     datetime = models.DateTimeField(auto_now=True, editable=False)
+
+    class Meta:
+        verbose_name = "Test"
 
     def __init__(self, *args, **kwargs):
         super(Test, self).__init__(item_type='te', *args, **kwargs)
@@ -116,6 +125,10 @@ class Question(PolymorphicModel):
     negative_feedback = models.ForeignKey('Resource', null=True, blank=True,
             related_name='+')
 
+    class Meta:
+        verbose_name = "Regular question"
+        verbose_name_plural = "Regular questions"
+
     def __repr__(self):
         return str(self)
 
@@ -128,6 +141,8 @@ class Question(PolymorphicModel):
 class MultipleChoiceQuestion(Question):
     class Meta:
         proxy = True
+        verbose_name = "Multiple-choice question"
+        verbose_name_plural = "Multiple-choice questions"
 
 class QuestionOption(models.Model):
     value = models.CharField(max_length=100)
