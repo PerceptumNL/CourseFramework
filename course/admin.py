@@ -18,10 +18,22 @@ class MCQuestionAdmin(PolymorphicChildModelAdmin,
         SummernoteModelAdmin):
     base_model = MultipleChoiceQuestion
     exclude = ('options',)
+    fieldsets = (
+        (None, { 'fields': ('question', 'answer')}),
+        ('Feedback', {
+            'fields': ('positive_feedback', 'negative_feedback')
+        })
+    )
     inlines = [MCOptionsInline]
 
 class RegularQuestionAdmin(PolymorphicChildModelAdmin, SummernoteModelAdmin):
     base_model = RegularQuestion
+    fieldsets = (
+        (None, { 'fields': ('question', 'answer')}),
+        ('Feedback', {
+            'fields': ('positive_feedback', 'negative_feedback')
+        })
+    )
 
 class QuestionParentAdmin(PolymorphicParentModelAdmin):
     base_model = Question
