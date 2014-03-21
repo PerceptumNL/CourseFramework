@@ -30,4 +30,5 @@ def process_test_submission(request, test_id):
                 "feedback": question.negative_feedback.body
             }
     score /= total
+    score *= 100
     return HttpResponse({"score":score, "feedback":feedback})

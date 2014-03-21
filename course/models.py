@@ -1,4 +1,5 @@
 from django.db import models
+from polymorphic import PolymorphicModel
 
 class Course(models.Model):
     title = models.CharField(max_length=255)
@@ -19,6 +20,15 @@ class CourseContent(models.Model):
     course = models.ForeignKey('Course')
     lesson = models.ForeignKey('Lesson')
     order = models.PositiveSmallIntegerField()
+
+    def __repr__(self):
+        return str(self)
+
+    def __unicode__(self):
+        return u'%s' % (self.__str__(),)
+
+    def __str__(self):
+        return "%s" % (self.lesson,)
 
     class Meta:
         ordering = ['order']
@@ -42,14 +52,25 @@ class LessonContent(models.Model):
     item = models.ForeignKey('Item')
     order = models.PositiveSmallIntegerField()
 
+    def __repr__(self):
+        return str(self)
+
+    def __unicode__(self):
+        return u'%s' % (self.__str__(),)
+
+    def __str__(self):
+        return "%s:%s" % (self.lesson.title, self.item.title,)
+
     class Meta:
         ordering = ['order']
 
-class Item(models.Model):
+class Item(PolymorphicModel):
     TYPE_RESOURCE = 're'
     TYPE_TEST = 'te'
+    TYPE_EXTERNAL = 'ex'
     TYPES = (
         (TYPE_RESOURCE, "Resource"),
+        (TYPE_EXTERNAL, "External resource"),
         (TYPE_TEST, "Test")
     )
     item_type = models.CharField(max_length=2, choices=TYPES, editable=False)
@@ -72,35 +93,32 @@ class Item(models.Model):
         return self.title
 
 class Resource(Item):
-    TYPE_RESOURCE = ''
-    TYPE_EXTERNAL = 'ex'
-    TYPES = (
-        (TYPE_RESOURCE, "Resource"),
-        (TYPE_EXTERNAL, "External Resource")
-    )
     body = models.TextField(null=True, blank=True)
-    resource_type = models.CharField(max_length=2, choices=TYPES,
-            editable=False, default=TYPE_RESOURCE)
-    related = models.ManyToManyField('self', null=True, blank=True)
+    related = models.ManyToManyField('Item', null=True, blank=True,
+            verbose_name = 'Related resources', related_name='resources')
+
+    class Meta:
+        verbose_name = "Resource"
 
     def __init__(self, *args, **kwargs):
         super(Resource, self).__init__(item_type=Item.TYPE_RESOURCE, *args, **kwargs)
 
-    def downcast(self):
-        if self.resource_type == self.TYPE_EXTERNAL:
-            return self.externalresource
-        return self
+class ExternalResource(Item):
+    url = models.URLField(max_length=255)
 
-class ExternalResource(Resource):
-    url = models.CharField(max_length=255)
+    class Meta:
+        verbose_name = "External resource"
 
     def __init__(self, *args, **kwargs):
         super(ExternalResource, self).__init__(
-                resource_type='ex', *args, **kwargs)
+                item_type='ex', *args, **kwargs)
 
 class Test(Item):
     questions = models.ManyToManyField('Question', through='TestContents')
     datetime = models.DateTimeField(auto_now=True, editable=False)
+
+    class Meta:
+        verbose_name = "Test"
 
     def __init__(self, *args, **kwargs):
         super(Test, self).__init__(item_type='te', *args, **kwargs)
@@ -113,13 +131,17 @@ class TestContents(models.Model):
     class Meta:
         ordering = ['order']
 
-class Question(models.Model):
-    title = models.CharField(max_length=255)
-    answer = models.CharField(max_length=255)
-    positive_feedback = models.ForeignKey('Resource', null=True, blank=True,
-            related_name='+')
-    negative_feedback = models.ForeignKey('Resource', null=True, blank=True,
-            related_name='+')
+class Question(PolymorphicModel):
+    question = models.CharField(max_length=255)
+    answer = models.CharField(max_length=255, verbose_name="Correct Answer")
+    positive_feedback = models.TextField(null=True, blank=True,
+        verbose_name="Feedback on correct answer")
+    negative_feedback = models.TextField(null=True, blank=True,
+        verbose_name="Feedback on incorrect answer")
+
+    class Meta:
+        verbose_name = "Question"
+        verbose_name_plural = "Questions"
 
     def __repr__(self):
         return str(self)
@@ -128,11 +150,30 @@ class Question(models.Model):
         return u'%s' % (self.__str__(),)
 
     def __str__(self):
-        return self.title
+        return self.question
+
+class RegularQuestion(Question):
+    class Meta:
+        proxy = True
+        verbose_name = "Regular question"
+        verbose_name_plural = "Regular questions"
 
 class MultipleChoiceQuestion(Question):
-    options = models.ManyToManyField('QuestionOption')
+    class Meta:
+        proxy = True
+        verbose_name = "Multiple-choice question"
+        verbose_name_plural = "Multiple-choice questions"
 
 class QuestionOption(models.Model):
-    value = models.CharField(max_length=100)
-    label = models.CharField(max_length=255)
+    answer = models.CharField(max_length=100)
+    question = models.ForeignKey('MultipleChoiceQuestion',
+            related_name='options')
+
+    def __repr__(self):
+        return str(self)
+
+    def __unicode__(self):
+        return u'%s' % (self.__str__(),)
+
+    def __str__(self):
+        return "Option: %s" % (self.answer,)
