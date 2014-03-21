@@ -54,10 +54,14 @@
                                     <a href="{{ relatedRes.url }}" target="blank">{{relatedRes.title}}</a>
                                     <span class="label label-info pull-right">external</span>
                                 </div>
-                                {% else %}
+                                {% elif relatedRes.item_type == relatedRes.TYPE_TEST %}
                                 <div class="panel-body">
-                                    {{ relatedRed.title }} {{ relatedRes.item_type }}
-                                    
+                                    {% if parent %}
+                                        <a href="/item/{{course.pk }}/{{lesson.pk}}/{{ parent }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
+                                    {% else %}
+                                        <a href="/item/{{course.pk }}/{{lesson.pk}}/{{ crt_index }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
+                                    {% endif %}
+                                    <span class="label label-warning pull-right">exercise</span>
                                 </div>
                                 {% endif %}
                             {% endfor %}
