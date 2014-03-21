@@ -1,32 +1,42 @@
-{% extends "frontend/base.html" %}
+<h3>{{ item.title }}</h3>
 
-{% block navbarTitle %} Test {% endblock %}
+<div class="container">
+    <form onsubmit="return false;" class="form-horizontal">
+     {% csrf_token %}
+{% for exercise in item.questions.all %}
+	<h4>{{ exercise|safe }}</h4>
+    <!-- Correct Answer -->
+    <div class="alert alert-dismissable alert-success" style="display: none"
+        id="correctfor{{exercise.pk}}">
+    </div>
+    <!-- Incorrect Answer -->
+    <div class="alert alert-dismissable alert-danger" style="display: none"
+        id="incorrectfor{{exercise.pk}}">
+    </div>
+    {% if exercise.type == "regular_question" %}
+        <!-- Form Answer -->
+        <div class="form-group">
+            <label class="control-label">Answer</label>
+            <div class="input-group">
+                <input type="text" name="{{ exercise.pk }}"class="form-control">
+            </div>
+        </div>
+    {% elif exercise.type == "mc_question" %}
+    <div class="form-group">
+        {% for option in exercise.options.all %}
+        <div class="radio">
+            <label>
+                <input type="checkbox" name="{{ exercise.pk }}"
+                  id="optionsRadios1" value="{{ option.pk }}">
+                {{ option.answer }}
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endfor %}
+    <button type="submit" class="btn btn-primary pull-right"
+        onclick="assessment_api(this.parentNode, {{ item.pk }});">Submit</button>
+</form>
+</div>
 
-{% block mainContent %}
-		<div class="container">
-			<!-- NavBar -->
-			<div class="row">
-				<ul class="breadcrumb">
-					<li><a href="/course/{{ course.pk }}/lessons">{{course.title}}</a></li>
-					<li><a href="/resource/{{course.pk }}/{{lesson.pk}}/{{lesson.items.first.pk}}">{{lesson.title}}</a></li>
-					{% for crumb in crumbs %}
-						<li><a href="">{{crumb.title}}</a></li>
-					{% endfor %}
-					<li class="active">{{resource.title}}</li>
-				</ul>
-			</div>
-			
-			<!-- Main Content -->
-			<div class="row">
-				<h3> {{resource.title}} </h3>
-			</div>
-			<div class="row">			
-			<!-- Main Resource -->
-			
-			</div>
-
-{% endblock mainContent %}
-
-{% block footer %}
-	{{course.title}} - {{lesson.title}}
-{% endblock footer %}
