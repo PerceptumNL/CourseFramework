@@ -76,8 +76,8 @@ class Item(PolymorphicModel):
 
 class Resource(Item):
     body = models.TextField(null=True, blank=True)
-    related = models.ManyToManyField('self', null=True, blank=True,
-            verbose_name = 'Related resources')
+    related = models.ManyToManyField('Item', null=True, blank=True,
+            verbose_name = 'Related resources', related_name='resources')
 
     class Meta:
         verbose_name = "Resource"
