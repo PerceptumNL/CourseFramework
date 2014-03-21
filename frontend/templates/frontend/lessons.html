@@ -1,4 +1,96 @@
-{{ course }}
-{% for lesson in lessons %}
-  {{ lessons.title }}
-{% endfor %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Incision - Cutting Edge E-Learning</title>
+
+	<!-- Bootstrap -->
+	<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	</head>
+	<body>
+		<div class="container">
+			<!-- Header -->
+			<div class="navbar-header">
+				<a href="/" class="navbar-brand"> {{course.title }} </a>
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="navbar-main">
+			<ul class="nav navbar-nav">
+				<li>
+					<a href="../help/">Help</a>
+				</li>
+				<li>
+					<a href="http://news.bootswatch.com">FAQ</a>
+				</li>
+				{% if courses|length > 0 %} 
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="download">Courses<span class="caret"></span></a>
+					<ul class="dropdown-menu" aria-labelledby="download">
+					{% for course in courses %}
+						<li><a href="/course/{{ course.pk }}/lessons">{{ course.title }}</a></li>
+					{% endfor %}
+					</ul>
+				</li>
+				{% endif %}
+			</ul>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li><img src="{% static 'assets/img/InCisionLogo.png' %}" height="64px"></li>
+			</ul>
+			</div>
+
+			
+			<div class="container">
+				<h3>Course Description:</h3>
+				<p> {{course.description}} </p>
+				
+			
+			{% for lesson in lessons %}
+				<div class="panel-info">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-lg-8">	
+								<h3> Lesson: {{ lesson.title }} </h3> 
+								
+							</div>
+							<div class="col-lg-4">	
+								<a href="/resource/{{course.pk }}/{{lesson.pk}}/{{lesson.items.first.pk}}"><button type="button" class="btn btn-primary pull-right">Start Lesson</button></a>
+								<br><br>
+								<p align="right">resources: <span class="badge"> {{lesson.items.count }}  </span> </p>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="btn-toolbar">
+							<div class="btn-group">
+							{% for item in lesson.items.all %}
+								<a href="/resource/{{course.pk }}/{{lesson.pk}}/{{item.pk}}"><button type="button" class="btn btn-default">{{item.title}}</button></a>
+							{% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>	
+				<br>
+			{% endfor %}
+			</div>	
+		
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	</body>
+</html>

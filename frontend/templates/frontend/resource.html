@@ -21,7 +21,7 @@
 		<div class="container">
 			<!-- Header -->
 			<div class="navbar-header">
-				<a href="../" class="navbar-brand">{{ course.title }}</a>
+				<a href="/" class="navbar-brand"> {{ course.title }} - {{lesson.title}}</a>
 				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
@@ -41,7 +41,7 @@
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="download">Courses<span class="caret"></span></a>
 					<ul class="dropdown-menu" aria-labelledby="download">
 					{% for course in courses %}
-						<li><a href="/course/{{course.pk }}">{{ course.title }}</a></li>
+						<li><a href="/course/{{ course.pk }}/lessons">{{ course.title }}</a></li>
 					{% endfor %}
 					</ul>
 				</li>
@@ -57,47 +57,53 @@
 			<!-- NavBar -->
 			<div class="row">
 				<ul class="breadcrumb">
-					<li class="active">Rectal Cancer Treatment</li>
+					<li><a href="/course/{{ course.pk }}/lessons">{{course.title}}</a></li>
+					<li><a href="/resource/{{course.pk }}/{{lesson.pk}}/{{lesson.items.first.pk}}">{{lesson.title}}</a></li>
+					{% for crumb in crumbs %}
+						<li><a href="">{{crumb.title}}</a></li>
+					{% endfor %}
+					<li class="active">{{resource.title}}</li>
 				</ul>
 			</div>
 			
 			
 			<!-- Main Content -->
 			<div class="row">
-				<h3> Diagnosis </h3>
+				<h3> {{resource.title}} </h3>
 			</div>
 			<div class="row">			
 			<!-- Main Resource -->
 				<div class="col-lg-8">
-
-					<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla viverra in justo sed pharetra. Aenean libero sem, imperdiet ultricies vestibulum id, ultrices eu turpis. Phasellus neque sem, dictum sit amet elit non, varius viverra eros. Aenean pulvinar tortor vitae magna vestibulum sodales. Nam ante elit, auctor auctor luctus ac, fringilla et massa. Curabitur pretium enim id sapien pretium, et semper enim fermentum. Donec pharetra, lorem in mollis eleifend, dolor augue elementum nibh, sit amet ullamcorper quam mauris quis lorem. Praesent venenatis nulla non diam vehicula, vitae viverra orci semper. Nam eu accumsan metus.
-<br><br>
-Quisque fermentum justo tellus, eget tristique erat dictum eu. Fusce vitae malesuada diam. Suspendisse turpis quam, sagittis ac tellus et, bibendum tincidunt lectus. Ut venenatis sit amet leo et faucibus. Nullam sit amet lobortis sem. In dapibus id nunc eu bibendum. Donec luctus diam turpis, ut mollis est ornare id. Pellentesque diam enim, posuere in eros eu, rutrum vulputate lectus. Sed pellentesque euismod congue. Quisque blandit libero purus, in iaculis dolor fermentum sit amet.
-
-					</p>
+					{{ resource.body|safe }}
+					<ul class="pager pull-right">
+						<li><a href="#">Previous</a></li>
+						<li><a href="#">Next</a></li>
+					</ul>
 				</div>
 				
 				<!-- Extra Resources -->
 				<div class="col-lg-4">
+				{% if resource.related.all|length > 0 %}
 					<div class="panel panel-info">
 						<div class="panel-heading">
 							<h3 class="panel-title">More Info</h3>
 						</div>
-						<div class="panel-body">
-							Panel content
-						</div>
+						{% for relatedRes in resource.related.all %}
+							{% if relatedRes.item_type == relatedRes.TYPE_RESOURCE %}
+							<div class="panel-body">
+								<a href="/resource/{{course.pk }}/{{lesson.pk}}/{{relatedRes.pk}}"> {{relatedRes.title}} </a>
+							</div>
+							{% elif relatedRes.item_type == relatedRes.TYPE_EXTERNAL %}
+							<div class="panel-body">
+								<a href="{{ relatedRes.externalresource.url }}" target="blank">{{relatedRes.title}}</a>
+							</div>
+							{% endif %}
+						{% endfor %}
 					</div>
-					<div class="panel panel-info">
-						<div class="panel-heading">
-							<h3 class="panel-title">External Resources</h3>
-						</div>
-						<div class="panel-body">
-							Panel content
-						</div>
-					</div>
+				{% endif %}
 				</div>
 			</div>
+
 			
 			<!-- Footer
 			<div class="footer navbar-fixed-bottom">
