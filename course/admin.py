@@ -19,8 +19,8 @@ class QuestionOptionAdmin(admin.ModelAdmin):
     model = QuestionOption
     form = QuestionOptionForm
 
-class NormalQuestionAdmin(PolymorphicChildModelAdmin):
-    base_model = Question
+class RegularQuestionAdmin(PolymorphicChildModelAdmin):
+    base_model = RegularQuestion
 
 class MCOptionsInline(admin.TabularInline):
     model = QuestionOption
@@ -37,7 +37,7 @@ class MultipleChoiceQuestionAdmin(PolymorphicChildModelAdmin):
 class QuestionParentAdmin(PolymorphicParentModelAdmin):
     base_model = Question
     child_models = (
-        (Question, NormalQuestionAdmin),
+        (RegularQuestion, RegularQuestionAdmin),
         (MultipleChoiceQuestion, MultipleChoiceQuestionAdmin),
     )
 

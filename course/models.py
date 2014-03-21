@@ -125,8 +125,8 @@ class Question(PolymorphicModel):
             related_name='+')
 
     class Meta:
-        verbose_name = "Regular question"
-        verbose_name_plural = "Regular questions"
+        verbose_name = "Question"
+        verbose_name_plural = "Questions"
 
     def __repr__(self):
         return str(self)
@@ -136,6 +136,12 @@ class Question(PolymorphicModel):
 
     def __str__(self):
         return self.title
+
+class RegularQuestion(Question):
+    class Meta:
+        proxy = True
+        verbose_name = "Regular question"
+        verbose_name_plural = "Regular questions"
 
 class MultipleChoiceQuestion(Question):
     class Meta:
