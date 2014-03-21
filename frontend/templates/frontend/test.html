@@ -1,51 +1,42 @@
 <h3>{{ item.title }}</h3>
 
 <div class="container">
-{% for exercise in item.test.questions.all %}
+    <form onsubmit="return false;" class="form-horizontal">
+     {% csrf_token %}
+{% for exercise in item.questions.all %}
 	<h4>{{ exercise|safe }}</h4>
-	
-{% endfor %}
-
-<!-- Correct Answer -->
-<div class="alert alert-dismissable alert-success">
-  <button type="button" class="close" data-dismiss="alert">×</button>
-  <strong>Correct</strong><br>
-  <p> Explanation </p>
-</div>
-
-<!-- Incorrect Answer -->
-<div class="alert alert-dismissable alert-danger">
-  <button type="button" class="close" data-dismiss="alert">×</button>
-  <strong>No</strong> 
-  <p>Explanation</p>
-</div>
-
-
-<!-- Form Answer -->
-<div class="form-group">
-		<label class="control-label">Answer</label>
-		<div class="input-group">
-			<input type="text" class="form-control">
-			<span class="input-group-btn">
-				<button class="btn btn-default" type="button">Submit Answer</button>
-			</span>
-		</div>
-	</div>
-
-<!-- Multiple Choice Answers -->
-<div class="form-group">
-      <label class="col-lg-2 control-label">Possible Answers:</label>
-      <div class="col-lg-8">
-        <div class="radio">
-          <label>
-            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
-            Option one is this
-          </label>
+    <!-- Correct Answer -->
+    <div class="alert alert-dismissable alert-success" style="display: none"
+        id="correctfor{{exercise.pk}}">
+    </div>
+    <!-- Incorrect Answer -->
+    <div class="alert alert-dismissable alert-danger" style="display: none"
+        id="incorrectfor{{exercise.pk}}">
+    </div>
+    {% if exercise.type == "regular_question" %}
+        <!-- Form Answer -->
+        <div class="form-group">
+            <label class="control-label">Answer</label>
+            <div class="input-group">
+                <input type="text" name="{{ exercise.pk }}"class="form-control">
+            </div>
         </div>
-      </div>
-	  <div class="col-lg-2">
-		<button type="button" class="btn btn-primary pull-right">Submit</button>
-	  </div>
+    {% elif exercise.type == "mc_question" %}
+    <div class="form-group">
+        {% for option in exercise.options.all %}
+        <div class="radio">
+            <label>
+                <input type="checkbox" name="{{ exercise.pk }}"
+                  id="optionsRadios1" value="{{ option.pk }}">
+                {{ option.answer }}
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endfor %}
+    <button type="submit" class="btn btn-primary pull-right"
+        onclick="assessment_api(this.parentNode, {{ item.pk }});">Submit</button>
+</form>
 </div>
 
-</div>

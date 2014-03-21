@@ -172,12 +172,18 @@ class MultipleChoiceQuestion(Question):
         verbose_name = "Multiple-choice question"
         verbose_name_plural = "Multiple-choice questions"
 
+    def save(self, *args, **kwargs):
+        self.answer = ",".join(
+                [str(option.pk) for option in self.options.all()])
+        return super(MultipleChoiceQuestion, self).save(*args, **kwargs)
+
     @property
     def type(self):
         return 'mc_question'
 
 class QuestionOption(models.Model):
     answer = models.CharField(max_length=100)
+    correct = models.BooleanField()
     question = models.ForeignKey('MultipleChoiceQuestion',
             related_name='options')
 
