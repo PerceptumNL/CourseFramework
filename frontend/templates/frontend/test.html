@@ -1,32 +1,51 @@
-{% extends "frontend/base.html" %}
+<h3>{{ item.title }}</h3>
 
-{% block navbarTitle %} Test {% endblock %}
+<div class="container">
+{% for exercise in item.test.questions.all %}
+	<h4>{{ exercise|safe }}</h4>
+	
+{% endfor %}
 
-{% block mainContent %}
-		<div class="container">
-			<!-- NavBar -->
-			<div class="row">
-				<ul class="breadcrumb">
-					<li><a href="/course/{{ course.pk }}/lessons">{{course.title}}</a></li>
-					<li><a href="/resource/{{course.pk }}/{{lesson.pk}}/{{lesson.items.first.pk}}">{{lesson.title}}</a></li>
-					{% for crumb in crumbs %}
-						<li><a href="">{{crumb.title}}</a></li>
-					{% endfor %}
-					<li class="active">{{resource.title}}</li>
-				</ul>
-			</div>
-			
-			<!-- Main Content -->
-			<div class="row">
-				<h3> {{resource.title}} </h3>
-			</div>
-			<div class="row">			
-			<!-- Main Resource -->
-			
-			</div>
+<!-- Correct Answer -->
+<div class="alert alert-dismissable alert-success">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <strong>Correct</strong><br>
+  <p> Explanation </p>
+</div>
 
-{% endblock mainContent %}
+<!-- Incorrect Answer -->
+<div class="alert alert-dismissable alert-danger">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <strong>No</strong> 
+  <p>Explanation</p>
+</div>
 
-{% block footer %}
-	{{course.title}} - {{lesson.title}}
-{% endblock footer %}
+
+<!-- Form Answer -->
+<div class="form-group">
+		<label class="control-label">Answer</label>
+		<div class="input-group">
+			<input type="text" class="form-control">
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="button">Submit Answer</button>
+			</span>
+		</div>
+	</div>
+
+<!-- Multiple Choice Answers -->
+<div class="form-group">
+      <label class="col-lg-2 control-label">Possible Answers:</label>
+      <div class="col-lg-8">
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
+            Option one is this
+          </label>
+        </div>
+      </div>
+	  <div class="col-lg-2">
+		<button type="button" class="btn btn-primary pull-right">Submit</button>
+	  </div>
+</div>
+
+</div>

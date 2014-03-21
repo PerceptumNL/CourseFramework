@@ -52,6 +52,9 @@ def item(request, course_id, lesson_id, item_index):
     button_list = []
 
     item = rel.item
+    
+    request.session["crumbs"] = []
+
     if item_index > 0:
         try:
             prev_res = LessonContent.objects.get(lesson=lesson, order=item_index-1)
@@ -80,7 +83,8 @@ def item(request, course_id, lesson_id, item_index):
         "lesson": lesson,
         "item": item,
         "button_list": button_list,
-        "crt_index": item_index
+        "crt_index": item_index,
+        "crumbs": [item]
     })
 
 
@@ -89,7 +93,7 @@ def related(request, course_id, lesson_id, parent_id, related_id):
     try:
         course = Course.objects.get(pk=course_id)
         lesson = Lesson.objects.get(pk=lesson_id)
-        resource = Resource.objects.get(pk = related_id)
+        item = Item.objects.get(pk=related_id)
         parent = LessonContent.objects.get(
             lesson = lesson,
             order = parent_id
@@ -103,18 +107,36 @@ def related(request, course_id, lesson_id, parent_id, related_id):
     except LessonContent.MultipleObjectsReturned:
         return HttpResponseRedirect("/")
 
-    parent = parent.item.downcast()
+    crumbIds = request.session.get("crumbs", [parent_id])
+
+    if item.pk in crumbIds:
+        tmpIds = []
+        for crumbId in crumbIds:
+            if crumbId==item.pk:
+                break
+            tmpIds.append(crumbId)
+        crumbIds = tmpIds
+    
+    crumbIds.append(item.pk)
+    request.session["crumbs"] = crumbIds
+
+    crumbs = []
+    for crumbId in crumbIds:
+        crumbs.append(Item.objects.get(pk=crumbId))
+    
+    parent = parent.item
     
     button_list = []
-    button = {'title': parent.title, 'url': '/resource/'+ str(course.pk) +'/'+ str(lesson.pk) +'/'+ str(parent_id)}
+    button = {'title': "back to " + parent.title, 'url': '/item/'+ str(course.pk) +'/'+ str(lesson.pk) +'/'+ str(parent_id)}
     button_list.append(button)
     
-    return render(request, 'frontend/resource.html', {
+    return render(request, 'frontend/item.html', {
         "course": course,
         "lesson": lesson,
-        "resource": resource,
+        "item": item,
         "button_list": button_list,
         "parent": parent_id,
+        "crumbs": crumbs
     })
 
 
