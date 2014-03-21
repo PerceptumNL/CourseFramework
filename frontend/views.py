@@ -30,7 +30,7 @@ def lessons(request, course_id):
         "lessons": course.lessons.all()
     })
 
-def resource(request, course_id, lesson_id, request_id):
+def resource(request, course_id, lesson_id, resource_id):
     try:
         course = Course.objects.get(pk=course_id)
         lesson = Lesson.objects.get(pk=lesson_id)
@@ -45,6 +45,6 @@ def resource(request, course_id, lesson_id, request_id):
     resource = resource.downcast()
     return render(request, 'frontend/resource.html', {
         "course": course,
-        "lessson": lesson,
+        "lesson": lesson,
         "resource": resource,
     })

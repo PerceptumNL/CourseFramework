@@ -21,7 +21,7 @@
 		<div class="container">
 			<!-- Header -->
 			<div class="navbar-header">
-				<a href="../" class="navbar-brand">{{ course.title }}</a>
+				<a href="/" class="navbar-brand"> Incision</a>
 				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
@@ -41,7 +41,7 @@
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="download">Courses<span class="caret"></span></a>
 					<ul class="dropdown-menu" aria-labelledby="download">
 					{% for course in courses %}
-						<li><a href="/course/{{course.pk }}">{{ course.title }}</a></li>
+						<li><a href="/course/{{ course.pk }}/lessons">{{ course.title }}</a></li>
 					{% endfor %}
 					</ul>
 				</li>
@@ -61,21 +61,41 @@
 			<div class="row">
 				<h3> Courses </h3>
 			</div>
-			{% for course in courses %}
-			<div class="row">			
-			<!-- Main Resource -->
-				<div class="col-lg-4">
-					<h3><a href="/course/{{course.pk }}">{{ course.title }}</a></h3>
-				</div>
-				
-				<!-- Extra Resources -->
-				<div class="col-lg-8">
-					<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla viverra in justo sed pharetra. Aenean libero sem, imperdiet ultricies vestibulum id, ultrices eu turpis. Phasellus neque sem, dictum sit amet elit non, varius viverra eros. Aenean pulvinar tortor vitae magna vestibulum sodales. Nam ante elit, auctor auctor luctus ac, fringilla et massa. Curabitur pretium enim id sapien pretium, et semper enim fermentum. Donec pharetra, lorem in mollis eleifend, dolor augue elementum nibh, sit amet ullamcorper quam mauris quis lorem. Praesent venenatis nulla non diam vehicula, vitae viverra orci semper. Nam eu accumsan metus.
-					</p>
-				</div>
-			</div>
-			{% endfor %}
+
+					
+				<!-- Course List -->
+				{% for course in courses %}
+				<div class="row">	
+					<div class="panel panel-info">
+						<div class="panel-heading">
+						<div class="row">
+							<div class="col-lg-8">
+								<h3 class="panel-title">{{ course.title }}</h3> 
+							</div>
+							<div class="col-lg-4">
+								<a href="/course/{{course.pk }}/lessons"><button type="button" class="btn btn-primary pull-right">Start Course</button></a>
+							</div>
+						</div>
+						</div>
+						<div class="panel-body">
+							<div class="row">				
+								<div class="col-lg-8">			
+									<p>{{ course.description }} </p>
+								</div>
+								<div class="col-lg-4">
+									{% if course.lessons.count > 0 %} 
+										<div class="panel panel-default">
+										{% for lesson in course.lessons.all %}
+											<div class="panel-body"> {{ lesson.title }} </div>
+										{% endfor %}
+										</div>
+									{% endif %}	
+								</div>
+							</div>
+						</div>	
+					</div>
+				</div>					
+				{% endfor %}	
 			{% endif %}
 
 		</div>
