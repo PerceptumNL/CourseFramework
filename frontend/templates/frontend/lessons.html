@@ -18,7 +18,7 @@
 								
 							</div>
 							<div class="col-lg-4">	
-								<a href="/resource/{{course.pk }}/{{lesson.pk}}/1"><button type="button" class="btn btn-primary pull-right">Start Lesson</button></a>
+								<a href="/item/{{course.pk }}/{{lesson.pk}}/1"><button type="button" class="btn btn-primary pull-right">Start Lesson</button></a>
 								<br><br>
 								<p align="right">resources: <span class="badge"> {{lesson.items.count }}  </span> </p>
 							</div>
@@ -28,7 +28,7 @@
 						<div class="btn-toolbar">
 							<div class="btn-group">
 							{% for item in lesson.items.all %}
-								<a href="/resource/{{course.pk }}/{{lesson.pk}}/{{ forloop.counter }}"><button type="button" class="btn btn-default">{{item.title}}</button></a>
+								<a href="/item/{{course.pk }}/{{lesson.pk}}/{{ forloop.counter }}"><button type="button" class="btn btn-default">{{item.title}}</button></a>
 							{% endfor %}
 							</div>
 						</div>
