@@ -31,6 +31,16 @@ def lessons(request, course_id):
         "lessons": course.lessons.all()
     })
 
+def help(request):
+    return render(request, 'frontend/help.html', {
+        "courses": Course.objects.all()
+    })
+
+def faq(request):
+    return render(request, 'frontend/faq.html', {
+        "courses": Course.objects.all()
+    })
+
 def item(request, course_id, lesson_id, item_index):
     item_index = int(item_index)
     try:
@@ -79,6 +89,7 @@ def item(request, course_id, lesson_id, item_index):
         return HttpResponseRedirect("/")
 
     return render(request, 'frontend/item.html', {
+        "courses": Course.objects.all(),
         "course": course,
         "lesson": lesson,
         "item": item,
@@ -131,6 +142,7 @@ def related(request, course_id, lesson_id, parent_id, related_id):
     button_list.append(button)
     
     return render(request, 'frontend/item.html', {
+        "courses": Course.objects.all(),
         "course": course,
         "lesson": lesson,
         "item": item,

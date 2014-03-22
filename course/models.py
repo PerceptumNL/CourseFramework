@@ -173,8 +173,8 @@ class MultipleChoiceQuestion(Question):
         verbose_name_plural = "Multiple-choice questions"
 
     def save(self, *args, **kwargs):
-        self.answer = ",".join(
-                [str(option.pk) for option in self.options.all()])
+        self.answer = ",".join([str(option.pk) for option in
+            filter(lambda x: x.correct, self.options.all())])
         return super(MultipleChoiceQuestion, self).save(*args, **kwargs)
 
     @property
@@ -186,6 +186,11 @@ class QuestionOption(models.Model):
     correct = models.BooleanField()
     question = models.ForeignKey('MultipleChoiceQuestion',
             related_name='options')
+
+    def save(self, *args, **kwargs):
+        result = super(QuestionOption, self).save(*args, **kwargs)
+        self.question.save()
+        return result
 
     def __repr__(self):
         return str(self)
