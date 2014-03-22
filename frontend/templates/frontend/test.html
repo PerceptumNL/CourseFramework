@@ -38,11 +38,11 @@
     <button type="submit" class="btn btn-primary pull-right"
         onclick="assessment_api(this.parentNode, {{ item.pk }});">Submit</button>
 </form>
-					<ul class="pager pull-left clearfix">
-						{% for button in button_list %}
-							<li><a href={{ button.url }}>{{ button.title }}</a></li>
-						{% endfor %}
-					</ul>
+<ul class="pager pull-left clearfix">
+	{% for button in button_list %}
+		<li><a href={{ button.url }}>{{ button.title }}</a></li>
+	{% endfor %}
+</ul>
 
 </div>
 
