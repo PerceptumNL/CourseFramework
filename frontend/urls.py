@@ -14,4 +14,6 @@ urlpatterns = patterns('',\
         views.related, name='related'),
     url(r'api/test/(?P<test_id>\d+)/?$',
         api.process_test_submission, name='api_test_submission'),
+    url(r'help/', views.help, name='help'),
+    url(r'faq/', views.faq, name='faq'),
 )

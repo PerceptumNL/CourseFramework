@@ -31,6 +31,16 @@ def lessons(request, course_id):
         "lessons": course.lessons.all()
     })
 
+def help(request):
+    return render(request, 'frontend/help.html', {
+        "courses": Course.objects.all()
+    })
+
+def faq(request):
+    return render(request, 'frontend/faq.html', {
+        "courses": Course.objects.all()
+    })
+
 def item(request, course_id, lesson_id, item_index):
     item_index = int(item_index)
     try:

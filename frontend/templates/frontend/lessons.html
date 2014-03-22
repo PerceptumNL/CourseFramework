@@ -28,7 +28,16 @@
 						<div class="btn-toolbar">
 							<div class="btn-group">
 							{% for item in lesson.items.all %}
-								<a href="/item/{{course.pk }}/{{lesson.pk}}/{{ forloop.counter }}"><button type="button" class="btn btn-default">{{item.title}}</button></a>
+									<a href="/item/{{course.pk }}/{{lesson.pk}}/{{ forloop.counter }}">
+										<button type="button" class="btn btn-default">
+											<div class="container-fluid">
+												{{ forloop.counter }}: {{item.title}}
+												{% if item.item_type == item.TYPE_TEST %}
+													- exercise
+												{% endif %}
+											</div>
+										</button>
+									</a>
 							{% endfor %}
 							</div>
 						</div>
