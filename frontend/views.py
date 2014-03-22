@@ -79,6 +79,7 @@ def item(request, course_id, lesson_id, item_index):
         return HttpResponseRedirect("/")
 
     return render(request, 'frontend/item.html', {
+        "courses": Course.objects.all(),
         "course": course,
         "lesson": lesson,
         "item": item,
@@ -131,6 +132,7 @@ def related(request, course_id, lesson_id, parent_id, related_id):
     button_list.append(button)
     
     return render(request, 'frontend/item.html', {
+        "courses": Course.objects.all(),
         "course": course,
         "lesson": lesson,
         "item": item,
