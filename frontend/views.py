@@ -79,7 +79,8 @@ def item(request, course_id, lesson_id, item_index):
     
     try:
         next_res = LessonContent.objects.get(lesson=lesson, order=item_index+1)
-        button = {'title': 'Next', 'url': '/item/'+ str(course.pk) +'/'+ str(lesson.pk) +'/'+ str(next_res.pk)}
+        print item_index
+        button = {'title': 'Next', 'url': '/item/'+ str(course.pk) +'/'+ str(lesson.pk) +'/'+ str(item_index+1)}
         button_list.append(button)
     except LessonContent.DoesNotExist:
         next_res = None
