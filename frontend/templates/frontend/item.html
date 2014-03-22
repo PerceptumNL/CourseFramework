@@ -22,7 +22,7 @@
 			
 			{% if item.item_type == item.TYPE_RESOURCE %}
 				{% include "frontend/resource.html" with item=item lesson=lesson course=course %}
-			{% elif item.item_type == item.TYPE_TEST%}
+			{% elif item.item_type == item.TYPE_TEST %}
 				{% include "frontend/test.html" with item=item lesson=lesson course=course %}			
 			{% else %}
 				<p> I do not know this type of resource. Probably an external resource </p><br>

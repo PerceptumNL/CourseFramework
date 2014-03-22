@@ -17,9 +17,9 @@ class MCOptionsInline(admin.TabularInline):
 class MCQuestionAdmin(PolymorphicChildModelAdmin,
         SummernoteModelAdmin):
     base_model = MultipleChoiceQuestion
-    exclude = ('options',)
+    exclude = ('options','answer')
     fieldsets = (
-        (None, { 'fields': ('question', 'answer')}),
+        (None, { 'fields': ('question',)}),
         ('Feedback', {
             'fields': ('positive_feedback', 'negative_feedback')
         })

@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, \
     HttpResponseBadRequest, HttpResponseNotFound
-
+import json
 from course.models import *
 
 def process_test_submission(request, test_id):
@@ -17,18 +17,19 @@ def process_test_submission(request, test_id):
     feedback = {}
     for question in test.questions.all():
         total += 1.0
-        answer = request.POST.get(question.pk, None)
+        answer = ",".join(request.POST.getlist(str(question.pk)))
         if question.answer == answer:
             score += 1.0
             feedback[question.pk] = {
                 "correct": True,
-                "feedback": question.positive_feedback.body
+                "feedback": question.positive_feedback
             }
         else:
             feedback[question.pk] = {
                 "correct": False,
-                "feedback": question.negative_feedback.body
+                "feedback": question.negative_feedback
             }
     score /= total
     score *= 100
-    return HttpResponse({"score":score, "feedback":feedback})
+    return HttpResponse(json.dumps({"score": score, "feedback": feedback}),
+            content_type = "application/json")
