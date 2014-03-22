@@ -21,31 +21,43 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">More Info</h3>
                             </div>
-                            {% for relatedRes in item.related.all %}
-                                {% if relatedRes.item_type == relatedRes.TYPE_RESOURCE %}						
-                                <div class="panel-body">
-                                    {% if parent %}
-                                        <a href="/item/{{course.pk }}/{{lesson.pk}}/{{ parent }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
-                                    {% else %}
-                                        <a href="/item/{{course.pk }}/{{lesson.pk}}/{{ crt_index }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
-                                    {% endif %}
-                                </div>
-                                {% elif relatedRes.item_type == relatedRes.TYPE_EXTERNAL %}
-                                <div class="panel-body">
-                                    <a href="{{ relatedRes.url }}" target="blank">{{relatedRes.title}}</a>
-                                    <span class="label label-info pull-right">external</span>
-                                </div>
-                                {% elif relatedRes.item_type == relatedRes.TYPE_TEST %}
-                                <div class="panel-body">
-                                    {% if parent %}
-                                        <a href="/item/{{course.pk }}/{{lesson.pk}}/{{ parent }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
-                                    {% else %}
-                                        <a href="/item/{{course.pk }}/{{lesson.pk}}/{{ crt_index }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
-                                    {% endif %}
-                                    <span class="label label-warning pull-right">exercise</span>
-                                </div>
-                                {% endif %}
-                            {% endfor %}
+							<div class="panel-body">
+								{% for relatedRes in item.related.all %}
+									{% if relatedRes.item_type == relatedRes.TYPE_RESOURCE %}						
+										<div class="row">
+											<div class="col-lg-10">
+												{% if parent %}
+													<a href="/item/{{course.pk }}/{{lesson.pk}}/{{ parent }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
+												{% else %}
+													<a href="/item/{{course.pk }}/{{lesson.pk}}/{{ crt_index }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
+												{% endif %}
+											</div>
+										</div>
+									{% elif relatedRes.item_type == relatedRes.TYPE_EXTERNAL %}
+										<div class="row">
+											<div class="col-lg-10">
+												<a href="{{ relatedRes.url }}" target="blank">{{relatedRes.title}}</a>
+											</div>
+											<div class="col-lg-2">
+												<span class="label label-info pull-right">external</span>
+											</div>
+										</div>
+									{% elif relatedRes.item_type == relatedRes.TYPE_TEST %}
+									<div class="row">                                
+										<div class="col-lg-10">
+											{% if parent %}
+												<a href="/item/{{course.pk }}/{{lesson.pk}}/{{ parent }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
+											{% else %}
+												<a href="/item/{{course.pk }}/{{lesson.pk}}/{{ crt_index }}/related/{{ relatedRes.pk }}/"> {{relatedRes.title}} </a>
+											{% endif %}
+										</div>
+										<div class="col-lg-2">
+											<span class="label label-warning pull-right">exercise</span>
+										</div>
+									</div>
+									{% endif %}
+								{% endfor %}
+							</div>
                         </div>
                     {% endif %}
                 {% endif %}
