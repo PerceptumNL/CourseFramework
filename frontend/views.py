@@ -68,7 +68,8 @@ def item(request, course_id, lesson_id, item_index):
     if item_index > 0:
         try:
             prev_res = LessonContent.objects.get(lesson=lesson, order=item_index-1)
-            button = {'title': 'Previous', 'url': '/item/'+ str(course.pk) +'/'+ str(lesson.pk) +'/'+ str(prev_res.pk)}
+            button = {'title': 'Previous', 'url': '/item/' + str(course.pk) +
+                    '/'+ str(lesson.pk) +'/'+ str(item_index-1)}
             button_list.append(button)
         except LessonContent.DoesNotExist:
             prev_res = None
@@ -76,10 +77,11 @@ def item(request, course_id, lesson_id, item_index):
             return HttpResponseRedirect("/")
     else:
         prev_res = None
-    
+
     try:
         next_res = LessonContent.objects.get(lesson=lesson, order=item_index+1)
-        button = {'title': 'Next', 'url': '/item/'+ str(course.pk) +'/'+ str(lesson.pk) +'/'+ str(next_res.pk)}
+        button = {'title': 'Next', 'url': '/item/'+ str(course.pk) +
+                '/'+ str(lesson.pk) +'/'+ str(item_index+1)}
         button_list.append(button)
     except LessonContent.DoesNotExist:
         next_res = None
