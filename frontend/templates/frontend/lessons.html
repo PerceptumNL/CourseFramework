@@ -27,7 +27,7 @@
 					<div class="panel-body">
 						<div class="btn-toolbar">
 							<div class="btn-group">
-							{% for item in lesson.items.all %}
+							{% for item in lesson.ordered_items.all %}
 									<a href="/item/{{course.pk }}/{{lesson.pk}}/{{ forloop.counter }}">
 										{% if item.item_type == item.TYPE_TEST %}
 											<button type="button" class="btn btn-warning">
