@@ -42,6 +42,10 @@ class Lesson(models.Model):
         rel = CourseContent.objects.filter(lesson=self)
         return ", ".join([str(x.course) for x in rel])
 
+    @property
+    def ordered_items(self):
+        return self.items.order_by('lessoncontent__order')
+
     def __repr__(self):
         return str(self)
 
