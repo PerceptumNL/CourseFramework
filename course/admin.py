@@ -105,6 +105,8 @@ class LessonContentsInline(SortableInlineAdminMixin, admin.TabularInline):
 
 class LessonAdmin(admin.ModelAdmin):
     inlines = [ LessonContentsInline ]
+    list_display = ('title', 'course',)
+    search_fields = ('title',)
 
 ##########
 # Course #

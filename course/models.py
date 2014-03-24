@@ -38,6 +38,10 @@ class Lesson(models.Model):
     datetime = models.DateTimeField(auto_now=True, editable=False)
     items = models.ManyToManyField('Item', through='LessonContent')
 
+    def course(self):
+        rel = CourseContent.objects.filter(lesson=self)
+        return ", ".join([str(x.course) for x in rel])
+
     def __repr__(self):
         return str(self)
 
