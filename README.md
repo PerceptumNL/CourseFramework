@@ -1,4 +1,4 @@
-incision
+Course Framework
 ========
 
-E-learning platform for surgeons
+Framework for django based courses. No guarantees.
